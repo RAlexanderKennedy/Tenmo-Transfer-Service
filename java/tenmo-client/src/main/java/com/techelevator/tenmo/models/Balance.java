@@ -7,7 +7,7 @@ private double balance;
 
 	@Override
 public String toString() {
-	return "Balance = " + balance;
+	return "Your current account balance is: $" + balance;
 }
 
 
