@@ -15,4 +15,10 @@ public String toString() {
 		return balance;
 	}
 
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+	
+	
+
 }

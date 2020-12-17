@@ -1,5 +1,7 @@
 package com.techelevator.tenmo.dao;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +9,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.tenmo.model.Balance;
+import com.techelevator.tenmo.model.User;
 
 @Component
 public class TransferSqlDAO implements TransferDAO {
@@ -33,6 +36,18 @@ public class TransferSqlDAO implements TransferDAO {
 		
 		return userBalance;
 	}
+
+	@Override
+	public Balance updateBalance(int userId, Balance balance) {
+		
+		String sql = "UPDATE accounts SET balance = ? WHERE user_id = ?";
+		
+		jdbcTemplate.update(sql, balance.getBalance(), userId);
+		
+		return balance;
+	}
+
+
 	
 	
 

@@ -2,6 +2,7 @@ package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Balance;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
@@ -90,8 +91,25 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
-		
+		transfer.AUTH_TOKEN = currentUser.getToken();
+		System.out.println("-------------------------------------------");
+		System.out.println("Users");
+		System.out.println("ID"+"\t"+"Name");
+		System.out.println("-------------------------------------------");
+		User[] userList = transfer.returnUsers();
+		for (User user : userList) {
+			System.out.println(user.getId() + "\t" + user.getUsername());
+		}
+		System.out.println("---------");
+		int userId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		double amount = Double.parseDouble(console.getUserInput("Enter amount"));
+		Balance balance = transfer.returnBalance();
+		if (balance.getBalance() >= amount) {
+			System.out.println("Can send money");
+			balance.setBalance(balance.getBalance()+amount);
+			System.out.println(balance.getBalance());
+			transfer.updateBalance(balance, userId);
+		}
 	}
 
 	private void requestBucks() {

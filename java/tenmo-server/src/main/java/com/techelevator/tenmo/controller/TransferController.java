@@ -1,9 +1,12 @@
 package com.techelevator.tenmo.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Balance;
+import com.techelevator.tenmo.model.User;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -33,4 +37,16 @@ public class TransferController {
 		return balance;
 	}
 
+	@RequestMapping(path="/get-users", method = RequestMethod.GET)
+	public List<User> getUsers() {
+		List<User> userList = userDao.findAll();
+		return userList;
+	}
+	
+	@RequestMapping(path="/update-balance/{id}", method = RequestMethod.PUT)
+	public Balance subtractBalance (@RequestBody Balance balance, @PathVariable int id) {
+		transferDao.updateBalance(id, balance);
+		Balance newBalance = transferDao.getBalance(id);
+		return newBalance;
+	}
 }
