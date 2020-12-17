@@ -2,6 +2,7 @@ package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Balance;
+import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
@@ -28,7 +29,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
-    private TransferService transfer;
+    private TransferService transferService;
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL), new TransferService(API_BASE_URL));
@@ -36,7 +37,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     }
 
     public App(ConsoleService console, AuthenticationService authenticationService, TransferService transferService) {
-		this.transfer = transferService;
+		this.transferService = transferService;
     	this.console = console;
 		this.authenticationService = authenticationService;
 	}
@@ -74,8 +75,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewCurrentBalance() {
 		
-		transfer.AUTH_TOKEN = currentUser.getToken();
-		Balance balance = transfer.returnBalance();
+		transferService.AUTH_TOKEN = currentUser.getToken();
+		Balance balance = transferService.returnBalance();
 		
 		System.out.println(balance.toString());
 	}
@@ -91,27 +92,34 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		transfer.AUTH_TOKEN = currentUser.getToken();
+		transferService.AUTH_TOKEN = currentUser.getToken();
 		System.out.println("-------------------------------------------");
 		System.out.println("Users");
 		System.out.println("ID"+"\t"+"Name");
 		System.out.println("-------------------------------------------");
-		User[] userList = transfer.returnUsers();
+		User[] userList = transferService.returnUsers();
 		for (User user : userList) {
 			System.out.println(user.getId() + "\t" + user.getUsername());
 		}
 		System.out.println("---------");
 		int userId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
 		double amount = Double.parseDouble(console.getUserInput("Enter amount"));
-		Balance balance = transfer.returnBalance();
+		Balance balance = transferService.returnBalance();
 		if (balance.getBalance() >= amount) {
-			System.out.println("Can send money");
 			balance.setBalance(balance.getBalance()-amount);
-			System.out.println(balance.getBalance());
-			transfer.updateBalance(balance, currentUser.getUser().getId());
-			Balance balanceReceiver = transfer.returnBalanceById(userId);
+			transferService.updateBalance(balance, currentUser.getUser().getId());
+			Balance balanceReceiver = transferService.returnBalanceById(userId);
 			balanceReceiver.setBalance(balanceReceiver.getBalance()+amount);
-			transfer.updateBalance(balanceReceiver, userId);
+			transferService.updateBalance(balanceReceiver, userId);
+			
+			Transfer transfer = new Transfer();
+			transfer.setAccount_from(currentUser.getUser().getId());
+			transfer.setAccount_to(userId);
+			transfer.setAmount(amount);
+			transfer.setTransfer_status_id(2);
+			transfer.setTransfer_type_id(2);
+			
+			transferService.createTransfer(transfer);
 
 		}
 	}

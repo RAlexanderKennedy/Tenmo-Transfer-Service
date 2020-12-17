@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import com.techelevator.tenmo.models.Balance;
+import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.User;
 
 public class TransferService {
@@ -53,7 +54,13 @@ public class TransferService {
 		return balance;
 	}
 	
-	 private HttpEntity<Balance> makeBalanceEntity(Balance balance) {
+	public Transfer createTransfer(Transfer transfer) {
+		restTemplate.exchange(BASE_URL + "/create-transfer", HttpMethod.POST, makeTransferEntity(transfer), Transfer.class);
+		
+		return transfer;
+	}
+	
+	private HttpEntity<Balance> makeBalanceEntity(Balance balance) {
 		    HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.APPLICATION_JSON);
 		    headers.setBearerAuth(AUTH_TOKEN);
@@ -65,6 +72,14 @@ public class TransferService {
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.setBearerAuth(AUTH_TOKEN);
 	    HttpEntity entity = new HttpEntity<>(headers);
+	    return entity;
+	  }
+	
+	private HttpEntity<Transfer> makeTransferEntity(Transfer transfer) {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    headers.setBearerAuth(AUTH_TOKEN);
+	    HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
 	    return entity;
 	  }
 	

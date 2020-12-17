@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Balance;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 
 @RestController
@@ -56,5 +57,13 @@ public class TransferController {
 		Balance balance = transferDao.getBalance(id);
 		
 		return balance;
+	}
+	
+	@RequestMapping(path="/create-transfer", method=RequestMethod.POST)
+	public Transfer createNewTransfer (@RequestBody Transfer transfer) {
+		
+		transferDao.createNewTransfer(transfer);
+		
+		return transfer;
 	}
 }
