@@ -31,6 +31,15 @@ public class TransferService {
 		
 	}
 	
+	public Balance returnBalanceById(int id) {
+		Balance balance = new Balance();
+		
+		balance = restTemplate.exchange(BASE_URL + "/get-balance/" + id, HttpMethod.GET, makeAuthEntity(), Balance.class).getBody();
+		
+		return balance;
+		
+	}
+	
 	public User[] returnUsers() {
 		User[] userList = null;
 		userList = restTemplate.exchange(BASE_URL + "/get-users", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();

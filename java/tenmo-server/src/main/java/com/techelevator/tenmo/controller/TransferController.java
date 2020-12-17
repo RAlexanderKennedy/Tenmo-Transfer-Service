@@ -49,4 +49,12 @@ public class TransferController {
 		Balance newBalance = transferDao.getBalance(id);
 		return newBalance;
 	}
+	
+	@RequestMapping(path="/get-balance/{id}", method=RequestMethod.GET)
+	public Balance getRecieversBalance(@PathVariable int id) {
+		
+		Balance balance = transferDao.getBalance(id);
+		
+		return balance;
+	}
 }

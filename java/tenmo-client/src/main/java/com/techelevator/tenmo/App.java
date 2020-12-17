@@ -106,9 +106,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		Balance balance = transfer.returnBalance();
 		if (balance.getBalance() >= amount) {
 			System.out.println("Can send money");
-			balance.setBalance(balance.getBalance()+amount);
+			balance.setBalance(balance.getBalance()-amount);
 			System.out.println(balance.getBalance());
-			transfer.updateBalance(balance, userId);
+			transfer.updateBalance(balance, currentUser.getUser().getId());
+			Balance balanceReceiver = transfer.returnBalanceById(userId);
+			balanceReceiver.setBalance(balanceReceiver.getBalance()+amount);
+			transfer.updateBalance(balanceReceiver, userId);
+
 		}
 	}
 
@@ -138,6 +142,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private boolean isAuthenticated() {
 		return currentUser != null;
 	}
+
 
 	private void register() {
 		System.out.println("Please register a new user account");
