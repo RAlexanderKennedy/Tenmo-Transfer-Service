@@ -74,7 +74,7 @@ public class TransferSqlDAO implements TransferDAO {
 	public List<Transfer> getTransfersByUserId (int id) {
 		List<Transfer> transferList = new ArrayList<Transfer>();
 	
-		String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, username FROM transfers JOIN users ON transfers.account_from = users.user_id  WHERE user_id = ?";
+		String sql = "SELECT * FROM transfers WHERE account_from = ?";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
 		while (results.next()) {
 			Transfer newTransfer = null;
@@ -88,6 +88,13 @@ public class TransferSqlDAO implements TransferDAO {
 	@Override
 	public Transfer getTransferById (int id) {
 		Transfer transfer = null;
+		
+		String sql = "SELECT * FROM transfers WHERE transfer_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+		
+		if (results.next()) {
+			transfer = mapRowToTransfer(results);
+		}
 		return transfer;
 	}
 	
@@ -100,7 +107,6 @@ public class TransferSqlDAO implements TransferDAO {
 		newTransfer.setTransfer_type_id(results.getInt("transfer_type_id"));
 		newTransfer.setTransfer_status_id(results.getInt("transfer_status_id"));
 		newTransfer.setTransfer_id(results.getInt("transfer_id"));
-		newTransfer.setUsername(results.getString("username"));
 		
 		return newTransfer;
 	}

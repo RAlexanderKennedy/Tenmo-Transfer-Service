@@ -83,9 +83,18 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewTransferHistory() {
 		transferService.AUTH_TOKEN = currentUser.getToken();
+		System.out.println("-------------------------------------------");
+		System.out.println("Transfers");
+		System.out.println("ID" + "\t" + "From/To" + "\t" + "\t" + "Amount");
+		System.out.println("-------------------------------------------");
 		Transfer[] transferList = transferService.getTransfersByUserId(currentUser.getUser().getId());
 		for (Transfer transfer : transferList) {
-			System.out.println("id" + transfer.getTransfer_id()+ transfer.getTransfer_type_id() + transfer.getUsername() + transfer.getAmount());
+			String name = transferService.returnUsername(transfer.getAccount_to());
+			String fromTo = "";
+			if (transfer.getTransfer_type_id() == 2) {
+				fromTo += "To";
+			}
+			System.out.println(transfer.getTransfer_id()+ "\t" + fromTo + ": " + name + "\t" + "$ " + transfer.getAmount());
 		}
 		
 	}
@@ -127,9 +136,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			transfer.setTransfer_type_id(2);
 			
 			transferService.createTransfer(transfer);
-
 			
-			
+		}
+		else {
+			System.out.println("Sorry, you only have $" + balance.getBalance() + " in your account.");
 		}
 	}
 

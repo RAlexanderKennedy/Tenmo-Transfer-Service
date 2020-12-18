@@ -37,6 +37,12 @@ public class TransferController {
 		
 		return balance;
 	}
+	
+	@RequestMapping(path= "/get-username/{id}" , method=RequestMethod.GET)
+	public String getUsernameById (@PathVariable int id) {
+		String username = userDao.findUsernameById(id);
+		return username;
+	}
 
 	@RequestMapping(path="/get-users", method = RequestMethod.GET)
 	public List<User> getUsers() {
@@ -74,4 +80,10 @@ public class TransferController {
 		return transfers;
 	}
 	
+	@RequestMapping(path="/get-transfer/{id}", method=RequestMethod.GET)
+	public Transfer getTransferById(@PathVariable int id) {
+		
+		Transfer transfer = transferDao.getTransferById(id);
+		return transfer;
+	}
 }

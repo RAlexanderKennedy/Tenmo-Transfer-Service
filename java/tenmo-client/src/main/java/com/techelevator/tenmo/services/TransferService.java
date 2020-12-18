@@ -47,6 +47,11 @@ public class TransferService {
 		return userList;
 	}
 	
+	public String returnUsername(int id) {
+		String username = "";
+		username = restTemplate.exchange(BASE_URL + "/get-username/" + id, HttpMethod.GET, makeAuthEntity(), String.class).getBody();
+		return username;
+	}
 	public Balance updateBalance(Balance balance, int id) {
 		
 		restTemplate.exchange(BASE_URL + "/update-balance/" + id, HttpMethod.PUT, makeBalanceEntity(balance), Balance.class);
