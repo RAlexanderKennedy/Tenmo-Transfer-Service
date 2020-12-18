@@ -13,5 +13,8 @@ public interface TransferDAO {
 	public Balance updateBalance (int userId, Balance balance);
 	
 	public Transfer createNewTransfer (Transfer newTransfer);
+	
+	public Transfer getTransfersByUserId (int id);
+
 
 }

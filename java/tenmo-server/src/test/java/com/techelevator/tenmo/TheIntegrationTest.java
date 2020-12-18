@@ -93,7 +93,7 @@ class TheIntegrationTest {
 		
 		dao.createNewTransfer(test);
 		
-		Transfer actualTransfer = dao.getTransferById(107);
+		Transfer actualTransfer = dao.getTransferById(test.getTransfer_id());
 		
 		double actualAmount = actualTransfer.getAmount();
 		

@@ -51,10 +51,10 @@ public class TransferSqlDAO implements TransferDAO {
 	@Override
 	public Transfer createNewTransfer(Transfer newTransfer) {
 		
-		String sql = "INSERT into transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (?,?,?,?,?)";
+		String sql = "INSERT into transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (?,?,?,?,?,?)";
 		newTransfer.setTransfer_id(getNextTransferId());
 		
-		jdbcTemplate.update(sql, newTransfer.getTransfer_type_id(), newTransfer.getTransfer_status_id(), newTransfer.getAccount_from(), newTransfer.getAccount_to(), newTransfer.getAmount());
+		jdbcTemplate.update(sql, newTransfer.getTransfer_id(), newTransfer.getTransfer_type_id(), newTransfer.getTransfer_status_id(), newTransfer.getAccount_from(), newTransfer.getAccount_to(), newTransfer.getAmount());
 		
 		
 		return newTransfer;
@@ -69,16 +69,20 @@ public class TransferSqlDAO implements TransferDAO {
 			throw new RuntimeException("Something went wrong while getting an id for the new transfer");
 		}
 	}
-	
-	public Transfer getTransferById (int id) {
-		Transfer transfer = null;
-		String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfers WHERE transfer_id = ?";
+	@Override
+	public Transfer getTransfersByUserId (int id) {
+		Transfer newTransfer = null;
+		String sql = "SELECT transfer_id, transfer_type_id,  username, amount FROM transfers JOIN users ON transfers.account_from = users.user_id  WHERE user_id = ?";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
-		if (results.next()) {
-			transfer = mapRowToTransfer(results);
+		while (results.next()) {
+			
+			newTransfer.setAmount(results.getDouble("amount"));
+			newTransfer.setTransfer_type_id(results.getInt("transfer_type_id"));
+			newTransfer.setTransfer_id(results.getInt("transfer_id"));
+			newTransfer.setUsername(results.getString("username"));
 		}
 		
-		return transfer;
+		return newTransfer;
 	}
 	
 	public Transfer mapRowToTransfer (SqlRowSet results) {

@@ -66,4 +66,12 @@ public class TransferController {
 		
 		return transfer;
 	}
+	@RequestMapping(path="/get-transfer/{id}", method=RequestMethod.GET)
+	public Transfer getTransfer(@PathVariable int id) {
+		
+		Transfer transfer = transferDao.getTransfersByUserId(id);
+		
+		return transfer;
+	}
+	
 }

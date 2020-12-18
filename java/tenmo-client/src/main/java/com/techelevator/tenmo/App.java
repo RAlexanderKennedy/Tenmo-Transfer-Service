@@ -103,6 +103,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		}
 		System.out.println("---------");
 		int userId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		if (userId == 0) {
+			mainMenu();
+		}
 		double amount = Double.parseDouble(console.getUserInput("Enter amount"));
 		Balance balance = transferService.returnBalance();
 		if (balance.getBalance() >= amount) {
@@ -121,6 +124,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			
 			transferService.createTransfer(transfer);
 
+			
+			
 		}
 	}
 

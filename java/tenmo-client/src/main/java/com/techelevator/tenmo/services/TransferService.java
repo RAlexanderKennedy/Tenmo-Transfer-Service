@@ -60,6 +60,10 @@ public class TransferService {
 		return transfer;
 	}
 	
+	public Transfer getTransfersByUserId(Transfer transfer) {
+		
+	}
+	
 	private HttpEntity<Balance> makeBalanceEntity(Balance balance) {
 		    HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.APPLICATION_JSON);
