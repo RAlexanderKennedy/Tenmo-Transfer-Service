@@ -61,13 +61,37 @@ public class TransferSqlDAO implements TransferDAO {
 	}
 	
 
-	private int getNextTransferId() {
+	public int getNextTransferId() {
 		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('seq_transfer_id')");
 		if (nextIdResult.next()) {
 			return nextIdResult.getInt(1);
 		} else {
 			throw new RuntimeException("Something went wrong while getting an id for the new transfer");
 		}
+	}
+	
+	public Transfer getTransferById (int id) {
+		Transfer transfer = null;
+		String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfers WHERE transfer_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+		if (results.next()) {
+			transfer = mapRowToTransfer(results);
+		}
+		
+		return transfer;
+	}
+	
+	public Transfer mapRowToTransfer (SqlRowSet results) {
+		
+		Transfer newTransfer = new Transfer();
+		newTransfer.setAccount_from(results.getInt("account_from"));
+		newTransfer.setAccount_to(results.getInt("account_to"));
+		newTransfer.setAmount(results.getDouble("amount"));
+		newTransfer.setTransfer_type_id(results.getInt("transfer_type_id"));
+		newTransfer.setTransfer_status_id(results.getInt("transfer_status_id"));
+		newTransfer.setTransfer_id(results.getInt("transfer_id"));
+		
+		return newTransfer;
 	}
 	
 	
