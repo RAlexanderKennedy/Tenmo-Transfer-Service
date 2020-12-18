@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -70,19 +71,24 @@ public class TransferSqlDAO implements TransferDAO {
 		}
 	}
 	@Override
-	public Transfer getTransfersByUserId (int id) {
-		Transfer newTransfer = null;
-		String sql = "SELECT transfer_id, transfer_type_id,  username, amount FROM transfers JOIN users ON transfers.account_from = users.user_id  WHERE user_id = ?";
+	public List<Transfer> getTransfersByUserId (int id) {
+		List<Transfer> transferList = new ArrayList<Transfer>();
+	
+		String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount, username FROM transfers JOIN users ON transfers.account_from = users.user_id  WHERE user_id = ?";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
 		while (results.next()) {
-			
-			newTransfer.setAmount(results.getDouble("amount"));
-			newTransfer.setTransfer_type_id(results.getInt("transfer_type_id"));
-			newTransfer.setTransfer_id(results.getInt("transfer_id"));
-			newTransfer.setUsername(results.getString("username"));
+			Transfer newTransfer = null;
+			newTransfer = mapRowToTransfer(results);
+			transferList.add(newTransfer);
 		}
 		
-		return newTransfer;
+		return transferList;
+	}
+	
+	@Override
+	public Transfer getTransferById (int id) {
+		Transfer transfer = null;
+		return transfer;
 	}
 	
 	public Transfer mapRowToTransfer (SqlRowSet results) {
@@ -94,6 +100,7 @@ public class TransferSqlDAO implements TransferDAO {
 		newTransfer.setTransfer_type_id(results.getInt("transfer_type_id"));
 		newTransfer.setTransfer_status_id(results.getInt("transfer_status_id"));
 		newTransfer.setTransfer_id(results.getInt("transfer_id"));
+		newTransfer.setUsername(results.getString("username"));
 		
 		return newTransfer;
 	}

@@ -82,7 +82,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
+		transferService.AUTH_TOKEN = currentUser.getToken();
+		Transfer[] transferList = transferService.getTransfersByUserId(currentUser.getUser().getId());
+		for (Transfer transfer : transferList) {
+			System.out.println(transfer.getTransfer_id()+ transfer.getTransfer_type_id() + transfer.getUsername() + transfer.getAmount());
+		}
 		
 	}
 

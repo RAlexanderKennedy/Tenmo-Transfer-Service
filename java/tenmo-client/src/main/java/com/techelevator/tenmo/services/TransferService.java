@@ -60,7 +60,11 @@ public class TransferService {
 		return transfer;
 	}
 	
-	public Transfer getTransfersByUserId(Transfer transfer) {
+	public Transfer[] getTransfersByUserId(int id) {
+		Transfer[] transferList = null;
+		
+		transferList = restTemplate.exchange(BASE_URL + "/get-transfers/" + id, HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+		return transferList;
 		
 	}
 	
