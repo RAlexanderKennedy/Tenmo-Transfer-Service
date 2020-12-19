@@ -74,8 +74,8 @@ public class TransferSqlDAO implements TransferDAO {
 	public List<Transfer> getTransfersByUserId (int id) {
 		List<Transfer> transferList = new ArrayList<Transfer>();
 	
-		String sql = "SELECT * FROM transfers WHERE account_from = ?";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+		String sql = "SELECT * FROM transfers WHERE account_from = ? OR account_to = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id, id);
 		while (results.next()) {
 			Transfer newTransfer = null;
 			newTransfer = mapRowToTransfer(results);
@@ -98,6 +98,32 @@ public class TransferSqlDAO implements TransferDAO {
 		return transfer;
 	}
 	
+	@Override
+	public String getTransferTypeById(int id) {
+		String type = "";
+		String sql = "SELECT transfer_type_desc FROM transfer_types WHERE transfer_type_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+		
+		if (results.next()) {
+			type = results.getString("transfer_type_desc");
+		}
+		return type;
+	}
+	
+	@Override
+	public String getTransferStatusById(int id) {
+		
+		String status = "";
+		String sql = "SELECT transfer_status_desc FROM transfer_statuses WHERE transfer_status_id = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+		
+		if (results.next()) {
+			status = results.getString("transfer_status_desc");
+		}
+		return status;
+		
+	}
+
 	public Transfer mapRowToTransfer (SqlRowSet results) {
 		
 		Transfer newTransfer = new Transfer();

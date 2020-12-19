@@ -73,6 +73,24 @@ public class TransferService {
 		
 	}
 	
+	public Transfer getTransferById(int id) {
+		Transfer transfer = null;
+		transfer = restTemplate.exchange(BASE_URL + "/get-transfer/" + id, HttpMethod.GET, makeAuthEntity(), Transfer.class).getBody();
+		return transfer;
+	}
+	
+	public String returnTypeById(int id) {
+		String type = "";
+		type = restTemplate.exchange(BASE_URL + "/get-type/" + id, HttpMethod.GET, makeAuthEntity(), String.class).getBody();
+		return type;
+	}
+	
+	public String returnStatusById(int id) {
+		String status = "";
+		status = restTemplate.exchange(BASE_URL + "/get-status/" + id, HttpMethod.GET, makeAuthEntity(), String.class).getBody();
+		return status;
+	}
+	
 	private HttpEntity<Balance> makeBalanceEntity(Balance balance) {
 		    HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.APPLICATION_JSON);

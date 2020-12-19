@@ -89,18 +89,36 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("-------------------------------------------");
 		Transfer[] transferList = transferService.getTransfersByUserId(currentUser.getUser().getId());
 		for (Transfer transfer : transferList) {
-			String name = transferService.returnUsername(transfer.getAccount_to());
+			String name = "";
 			String fromTo = "";
-			if (transfer.getTransfer_type_id() == 2) {
-				fromTo += "To";
+			if (transfer.getAccount_from() == currentUser.getUser().getId()) {
+				name = transferService.returnUsername(transfer.getAccount_to());
+				fromTo = "To";
+			}if (transfer.getAccount_to() == currentUser.getUser().getId()) {
+				name = transferService.returnUsername(transfer.getAccount_from());
+				fromTo += "From";
 			}
 			System.out.println(transfer.getTransfer_id()+ "\t" + fromTo + ": " + name + "\t" + "$ " + transfer.getAmount());
 		}
-		
+		System.out.println("---------");
+		int transferId = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
+		if (transferId != 0) {
+			System.out.println("--------------------------------------------"); 
+			System.out.println("Transfer Details");
+			System.out.println("--------------------------------------------");
+			Transfer transferToView = transferService.getTransferById(transferId);
+			String from = transferService.returnUsername(transferToView.getAccount_from());
+			String to = transferService.returnUsername(transferToView.getAccount_to());
+			String type = transferService.returnTypeById(transferToView.getTransfer_type_id());
+			String status = transferService.returnStatusById(transferToView.getTransfer_status_id());
+			System.out.println("Id: " + transferToView.getTransfer_id() + "\n" + "From: " + from +"\n" + "To: " + to + "\n" + "Type: " + type + "\n" + "Status: " + status + "\n" + "Amount: $" + transferToView.getAmount());
+		}else {
+		mainMenu();
+		}
 	}
 
 	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
+		System.out.println("Sorry this functionality does not work at this time. Please select another option.");
 		
 	}
 
@@ -144,7 +162,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
+		System.out.println("Sorry this functionality does not work at this time. Please select another option.");
 		
 	}
 	

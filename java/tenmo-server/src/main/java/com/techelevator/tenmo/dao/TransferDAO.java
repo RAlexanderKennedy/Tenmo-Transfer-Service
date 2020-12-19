@@ -18,5 +18,9 @@ public interface TransferDAO {
 	
 	public Transfer getTransferById(int id);
 
+	public String getTransferTypeById(int id);
+	
+	public String getTransferStatusById(int id);
+	
 
 }
