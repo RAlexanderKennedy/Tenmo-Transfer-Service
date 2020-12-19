@@ -43,7 +43,6 @@ class TheIntegrationTest {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		dao = new TransferSqlDAO(dataSource);
-		
 	}
 
 	@AfterEach
@@ -102,5 +101,46 @@ class TheIntegrationTest {
 		assertEquals(expectedAmount, actualAmount, 0);
 		
 	}
+	
+	@Test
+	public void can_get_transfer_type_by_id() {
+		
+		Transfer test = new Transfer();
+		test.setAccount_from(1);
+		test.setAccount_to(3);
+		test.setAmount(200);
+		test.setTransfer_status_id(2);
+		test.setTransfer_type_id(2);
+		
+		dao.createNewTransfer(test);
+		
+		String type = dao.getTransferTypeById(test.getTransfer_type_id());
+		
+		String expected = "Send";
+		
+		assertEquals(expected, type);
+		
+	}
+	
+	@Test
+	public void can_get_transfer_status_by_id() {
+		
+		Transfer test = new Transfer();
+		test.setAccount_from(1);
+		test.setAccount_to(3);
+		test.setAmount(200);
+		test.setTransfer_status_id(2);
+		test.setTransfer_type_id(2);
+		
+		dao.createNewTransfer(test);
+		
+		String status = dao.getTransferStatusById(test.getTransfer_status_id());
+		
+		String expected = "Approved";
+		
+		assertEquals(expected, status);
+		
+	}
+
 
 }
