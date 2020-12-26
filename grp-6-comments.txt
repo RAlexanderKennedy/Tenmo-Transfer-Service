@@ -1,0 +1,22 @@
+Very awesome, the code is neat, organized, and easy to follow. Only
+one issue:
+
+1. You should filter the logged on user from the list of people
+who you can send money to, otherwise I can attempt to send money
+to myself:
+
+===============================================
+-------------------------------------------
+Users
+ID	Name
+-------------------------------------------
+1	user
+2	admin
+---------
+Enter ID of user you are sending to (0 to cancel): 1
+Enter amount: 100
+Exception in thread "main" org.springframework.web.client.HttpServerErrorException$InternalServerError: 500 : [{"timestamp":"2020-12-25T01:32:24.203+00:00","status":500,"error":"Internal Server Error","message":"PreparedStatementCallback; SQL [INSERT into transfers (transfer_id, transfer_type_id, transfer_stat... (665 bytes)]
+	at org.springframework.web.client.HttpServerErrorException.create(HttpServerErrorException.java:100)
+	at org.springframework.web.client.DefaultResponseErrorHandler.handleError(DefaultResponseErrorHandler.java:172)
+
+===============================================
